@@ -1,0 +1,13 @@
+query allProjects($dto: ProjectFiltersInput!) {
+    allProjects(dto: $dto){
+        id
+        name
+        user {
+            id
+            firstname
+            email
+        }
+        createdAt
+        updatedAt
+    }
+}

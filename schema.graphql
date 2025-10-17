@@ -1,0 +1,67 @@
+# This file was generated. Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    "Permet de créer un nouveau projet"
+    createProject(dto: CreateProjectInput!): Project!
+    "Permet de créer un nouvel utilisateur"
+    createUser(dto: CreateUserInput!): User!
+}
+
+type Project {
+    "Date de création (UTC, immuable)"
+    createdAt: DateTime!
+    "Date de suppression (UTC)"
+    deletedAt: DateTime
+    id: ID!
+    name: String!
+    "Date de dernière mise à jour (UTC)"
+    updatedAt: DateTime!
+    user: User!
+}
+
+type Query {
+    "Retourne la liste des projets, filtrables par utilisateur"
+    allProjects(dto: ProjectFiltersInput!): [Project!]!
+    "Retourne la liste des utilisateurs"
+    allUsers: [User!]!
+}
+
+type User {
+    "Date de création (UTC, immuable)"
+    createdAt: DateTime!
+    "Date de suppression (UTC)"
+    deletedAt: DateTime
+    email: String!
+    firstname: String!
+    id: ID!
+    projects: [Project!]
+    "Date de dernière mise à jour (UTC)"
+    updatedAt: DateTime!
+}
+
+"A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
+scalar DateTime
+
+input CreateProjectInput {
+    "Nom du projet"
+    name: String!
+    "Identifiant de l'utilisateur qui créé le projet"
+    userId: String
+}
+
+input CreateUserInput {
+    "Email de l'utilisateur"
+    email: String!
+    "Prénom de l'utilisateur"
+    firstname: String!
+}
+
+input ProjectFiltersInput {
+    "Identifiant de l'utilisateur"
+    userId: String
+}
