@@ -1,0 +1,15 @@
+mutation updateTask($dto: UpdateTaskInput!) {
+    updateTask(dto: $dto) {
+      id
+      title
+      description
+      project {
+        id
+        name
+      }
+      status {
+        id
+        name
+      }
+    }
+}

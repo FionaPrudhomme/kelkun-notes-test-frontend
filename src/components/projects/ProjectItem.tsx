@@ -2,16 +2,22 @@ import dayjs from 'dayjs';
 import {useRouter} from 'next/navigation';
 
 import {Project} from '@/services/graphql/generated/graphql';
+import { useProjectStore } from '@/store/projectStore';
 
 interface IProps {
     project: Project
 }
 
 export default function ProjectItem({project}: IProps) {
-    const router = useRouter()
+    const router = useRouter(); 
+    const setSelectedProject = useProjectStore((state) => state.setSelectedProject);
+    
     return (
         <div
-            onClick={() => router.push(`/projects/${project.id}`)}
+            onClick={() => {
+                setSelectedProject(project);
+                router.push(`/projects/${project.id}`); 
+            }}
             className="bg-gray-950 border border-gray-800 rounded-lg p-4 hover:bg-gray-900 transition-colors cursor-pointer">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-white truncate">

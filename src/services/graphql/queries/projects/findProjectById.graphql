@@ -1,0 +1,11 @@
+query findProjectById($dto: ProjectByIdInput!) {
+  findProjectById(dto: $dto) {
+    id
+    name
+    createdAt
+    user {
+      id
+      email
+    }
+  }
+}

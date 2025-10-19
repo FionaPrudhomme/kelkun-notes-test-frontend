@@ -1,0 +1,19 @@
+query allTasks($dto: TaskFiltersInput!) {
+    allTasks(dto: $dto){
+        id
+        title
+        description
+        status {
+            id
+            name
+        }
+        isArchived
+        archivedAt
+        project {
+            id
+            name
+        }
+        createdAt
+        updatedAt
+    }
+}

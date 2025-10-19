@@ -1,4 +1,4 @@
-import {FolderKanban, LayoutDashboard, X} from 'lucide-react'
+import {FolderKanban, LayoutDashboard, X, MessageCircleQuestion} from 'lucide-react'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 
@@ -23,6 +23,11 @@ export function DashboardSidebar({isOpen, onClose}: SidebarProps) {
             href: '/projects',
             label: 'Projets',
             icon: FolderKanban
+        },
+        {
+            href: '/instructions',
+            label: 'Instructions',
+            icon: MessageCircleQuestion
         }
     ]
 
