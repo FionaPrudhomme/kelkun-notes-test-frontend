@@ -11,5 +11,7 @@ mutation updateTask($dto: UpdateTaskInput!) {
         id
         name
       }
+      isArchived
+      archivedAt
     }
 }

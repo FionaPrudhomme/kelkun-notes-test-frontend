@@ -21,7 +21,6 @@ import {Task, useUpdateTaskMutation} from '@/services/graphql/generated/graphql'
 import { updateTaskSchema } from '@/services/schemas/task/updateTaskShema'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { useStatusStore } from '@/services/stores/statusStore'
-import { DropdownMenu } from '@radix-ui/react-dropdown-menu'
 
 interface IProps {
     onUpdate: (task: Task) => void, 
@@ -40,7 +39,7 @@ export default function UpdateTaskFormDialog({ onUpdate, taskToUpdate }: IProps)
     const [updateTask, {loading}] = useUpdateTaskMutation({
         onError: (err) => toast.error(err.message),
         onCompleted: (res) => {
-            toast.success('Tache modifié avec succès')
+            toast.success('Tache modifiée avec succès')
             setIsOpen(false)
             form.reset()
             onUpdate(res.updateTask as Task)

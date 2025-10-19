@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import {Task} from '@/services/graphql/generated/graphql';
 import { StatusIndicator } from '@/components/tasks/StatusIndicator';
 import UpdateTaskFormDialog from './UpdateTaskFormDialog';
-
+import DeleteTask from './DeleteTask';
 interface IProps {
-  onUpdate: (task: Task) => void, 
+  onUpdate: () => void, 
   task: Task
 }
 
@@ -19,8 +19,9 @@ export default function TaskItem({onUpdate, task}: IProps) {
             <h3 className="text-lg font-semibold text-white truncate">
                 {task.title}
             </h3>
-          <div>
-            <UpdateTaskFormDialog onUpdate={onUpdate} taskToUpdate={task}></UpdateTaskFormDialog>
+          <div className='flex '>
+            <UpdateTaskFormDialog onUpdate={onUpdate} taskToUpdate={task} ></UpdateTaskFormDialog>
+            <DeleteTask onDelete={onUpdate} task={task}></DeleteTask>
           </div>
         </div>
         {task.description &&

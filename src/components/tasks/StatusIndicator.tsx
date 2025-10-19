@@ -1,4 +1,3 @@
-// components/StatusIndicator.tsx
 'use client';
 
 import { FC } from 'react';

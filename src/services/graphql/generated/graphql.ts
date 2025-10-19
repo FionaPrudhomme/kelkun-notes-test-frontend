@@ -164,10 +164,14 @@ export type TaskFiltersInput = {
 };
 
 export type UpdateTaskInput = {
+  /** archivedAt */
+  archivedAt?: InputMaybe<Scalars['DateTime']['input']>;
   /** Description */
   description?: InputMaybe<Scalars['String']['input']>;
   /** Identifiant de la tâche à mettre à jour */
   id: Scalars['String']['input'];
+  /** isArchived */
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   /** Identifiant du projet lié à la tache */
   projectId?: InputMaybe<Scalars['String']['input']>;
   /** Identifiant du statut de la tache */
@@ -209,7 +213,7 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, title: string, description?: string | null, project: { __typename?: 'Project', id: string, name: string }, status: { __typename?: 'Status', id: string, name: string } } };
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, title: string, description?: string | null, isArchived: boolean, archivedAt?: any | null, project: { __typename?: 'Project', id: string, name: string }, status: { __typename?: 'Status', id: string, name: string } } };
 
 export type CreateUserMutationVariables = Exact<{
   dto: CreateUserInput;
@@ -330,6 +334,8 @@ export const UpdateTaskDocument = gql`
       id
       name
     }
+    isArchived
+    archivedAt
   }
 }
     `;
