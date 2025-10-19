@@ -103,6 +103,8 @@ export type Query = {
   __typename?: 'Query';
   /** Retourne la liste des projets, filtrables par utilisateur */
   allProjects: Array<Project>;
+  /** Retourne la liste des status */
+  allStatus: Array<Status>;
   /** Retourne la liste des taches, filtrables par projet */
   allTasks: Array<Task>;
   /** Retourne la liste des utilisateurs */
@@ -141,12 +143,12 @@ export type Status = {
 
 export type Task = {
   __typename?: 'Task';
-  archivedAt: Scalars['DateTime']['output'];
+  archivedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Date de création (UTC, immuable) */
   createdAt: Scalars['DateTime']['output'];
   /** Date de suppression (UTC) */
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isArchived: Scalars['Boolean']['output'];
   project: Project;
@@ -207,7 +209,7 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, title: string, description: string, project: { __typename?: 'Project', id: string, name: string }, status: { __typename?: 'Status', id: string, name: string } } };
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask: { __typename?: 'Task', id: string, title: string, description?: string | null, project: { __typename?: 'Project', id: string, name: string }, status: { __typename?: 'Status', id: string, name: string } } };
 
 export type CreateUserMutationVariables = Exact<{
   dto: CreateUserInput;
@@ -230,12 +232,17 @@ export type FindProjectByIdQueryVariables = Exact<{
 
 export type FindProjectByIdQuery = { __typename?: 'Query', findProjectById: { __typename?: 'Project', id: string, name: string, createdAt: any, user: { __typename?: 'User', id: string, email: string } } };
 
+export type AllStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllStatusQuery = { __typename?: 'Query', allStatus: Array<{ __typename?: 'Status', id: string, name: string }> };
+
 export type AllTasksQueryVariables = Exact<{
   dto: TaskFiltersInput;
 }>;
 
 
-export type AllTasksQuery = { __typename?: 'Query', allTasks: Array<{ __typename?: 'Task', id: string, title: string, description: string, isArchived: boolean, archivedAt: any, createdAt: any, updatedAt: any, status: { __typename?: 'Status', id: string, name: string }, project: { __typename?: 'Project', id: string, name: string } }> };
+export type AllTasksQuery = { __typename?: 'Query', allTasks: Array<{ __typename?: 'Task', id: string, title: string, description?: string | null, isArchived: boolean, archivedAt?: any | null, createdAt: any, updatedAt: any, status: { __typename?: 'Status', id: string, name: string }, project: { __typename?: 'Project', id: string, name: string } }> };
 
 export type AllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -488,6 +495,49 @@ export type FindProjectByIdSuspenseQueryHookResult = ReturnType<typeof useFindPr
 export type FindProjectByIdQueryResult = Apollo.QueryResult<FindProjectByIdQuery, FindProjectByIdQueryVariables>;
 export function refetchFindProjectByIdQuery(variables: FindProjectByIdQueryVariables) {
       return { query: FindProjectByIdDocument, variables: variables }
+    }
+export const AllStatusDocument = gql`
+    query allStatus {
+  allStatus {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useAllStatusQuery__
+ *
+ * To run a query within a React component, call `useAllStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllStatusQuery(baseOptions?: Apollo.QueryHookOptions<AllStatusQuery, AllStatusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllStatusQuery, AllStatusQueryVariables>(AllStatusDocument, options);
+      }
+export function useAllStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllStatusQuery, AllStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllStatusQuery, AllStatusQueryVariables>(AllStatusDocument, options);
+        }
+export function useAllStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AllStatusQuery, AllStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AllStatusQuery, AllStatusQueryVariables>(AllStatusDocument, options);
+        }
+export type AllStatusQueryHookResult = ReturnType<typeof useAllStatusQuery>;
+export type AllStatusLazyQueryHookResult = ReturnType<typeof useAllStatusLazyQuery>;
+export type AllStatusSuspenseQueryHookResult = ReturnType<typeof useAllStatusSuspenseQuery>;
+export type AllStatusQueryResult = Apollo.QueryResult<AllStatusQuery, AllStatusQueryVariables>;
+export function refetchAllStatusQuery(variables?: AllStatusQueryVariables) {
+      return { query: AllStatusDocument, variables: variables }
     }
 export const AllTasksDocument = gql`
     query allTasks($dto: TaskFiltersInput!) {

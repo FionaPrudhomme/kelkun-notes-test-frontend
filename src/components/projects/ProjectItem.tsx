@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {useRouter} from 'next/navigation';
 
 import {Project} from '@/services/graphql/generated/graphql';
-import { useProjectStore } from '@/store/projectStore';
+import { useProjectStore } from '@/services/stores/projectStore';
 
 interface IProps {
     project: Project

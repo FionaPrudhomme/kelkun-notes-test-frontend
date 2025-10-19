@@ -2,16 +2,14 @@
 
 import {useRouter, useParams} from 'next/navigation';
 
-import {ExternalLink, Lightbulb} from 'lucide-react'
-import Link from 'next/link'
-
-import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert'
-import { Separator } from '@/components/ui/separator'
-import {useAuth} from '@/providers/AuthProvider'
-import {useAllTasksQuery, useFindProjectByIdQuery} from '@/services/graphql/generated/graphql'
-import { useProjectStore } from '@/store/projectStore';
+import {Status, Task, useAllStatusQuery, useAllTasksQuery, useFindProjectByIdQuery} from '@/services/graphql/generated/graphql'
+import { useProjectStore } from '@/services/stores/projectStore';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
+import CreateTaskFormDialog from '@/components/tasks/CreateTaskFormDialog';
+import TaskItem from '@/components/tasks/TaskItem';
+import TaskEmptyState from '@/components/tasks/TaskEmptyState'
+import { useStatusStore } from '@/services/stores/statusStore';
 
 export default function ProjectDetailPage() {
     const router = useRouter();
@@ -27,10 +25,23 @@ export default function ProjectDetailPage() {
     const project = projectInStore ?? projectData?.findProjectById;
 
     // Toujours appeler les hooks, même si project est null
-    const { data: tasksData, loading: tasksLoading } = useAllTasksQuery({
+    const { data: tasksData, loading: tasksLoading, refetch: refetchTasks } = useAllTasksQuery({
         variables: { dto: { projectId: projectId as string } },
         skip: !projectId,
     });
+
+     const { status, setStatus } = useStatusStore();
+
+    const { data: statusData, loading : loadingStatus } = useAllStatusQuery({
+        skip: status.length > 0, // évite l’appel si déjà en cache
+    });
+
+    useEffect(() => {
+        if (statusData?.allStatus && status.length === 0) {
+            const statusList = statusData.allStatus as Status[]; 
+            setStatus(statusList);
+        }
+    }, [statusData, status.length, setStatus]);
 
     useEffect(() => {
     if (!projectLoading && !project) {
@@ -40,11 +51,12 @@ export default function ProjectDetailPage() {
 
     const tasks = tasksData?.allTasks || [];
 
-    // Rendu conditionnel
-    if (projectLoading || tasksLoading) return <p>Chargement...</p>;
+    if (projectLoading && loadingStatus && status.length === 0) return <p>Chargement...</p>;
     if (!project) return null;
 
-
+    const handleTaskChange = async () => {
+        await refetchTasks(); 
+    }
 
     return (
         <div className="flex flex-col h-full">
@@ -52,7 +64,7 @@ export default function ProjectDetailPage() {
                 <h1 className="text-2xl font-semibold tracking-tight text-white">
                     {project.name}
                 </h1>
-                    
+                <CreateTaskFormDialog onCreated={handleTaskChange} projectId={projectId as string} />
                 <h2 className="text-xl font-semibold tracking-tight text-white">
                     Créé le{' '}
                     <span className="text-gray-300">
@@ -60,21 +72,21 @@ export default function ProjectDetailPage() {
                     </span>
                 </h2>
             </div>
-            {/* <div className="flex-1 overflow-y-auto">
-                {loading ? (
+            <div className="flex-1 overflow-y-auto">
+                {tasksLoading ? (
                     <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                        <div className="animate-pulse">Chargement des projets...</div>
+                        <div className="animate-pulse">Chargement des taches...</div>
                     </div>
-                ) : projects.length === 0 ? (
-                    <ProjectEmptyState onCreated={handleCreated}/>
+                ) : tasks.length === 0 ? (
+                        <TaskEmptyState onCreated={handleTaskChange} projectId={projectId as string} />
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {projects.map((project) => (
-                            <ProjectItem project={project as Project} key={project.id}/>
+                        {tasks.map((task) => (
+                            <TaskItem task={task as Task} key={task.id} onUpdate={handleTaskChange} />
                         ))}
                     </div>
                 )}
-            </div> */}
+            </div>
         </div>
     )
 }
