@@ -19,18 +19,30 @@ export default function ProjectDetailPage() {
     const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
     const { status, setStatus } = useStatusStore();
 
+    //On récupère les données du projet si on ne la plus en store 
     const { data: projectData, loading: projectLoading } = useFindProjectByIdQuery({
-        variables: { dto: { id: projectId as string } },
+        variables: {
+            dto: {
+                id: projectId as string
+            }
+        },
         skip: !!projectInStore,
     });
 
     const project = projectInStore ?? projectData?.findProjectById;
 
+    //On récupère les taches avec un filtre par projectId et avec statusId 
     const { data: tasksData, loading: tasksLoading, refetch: refetchTasks } = useAllTasksQuery({
-        variables: { dto: { projectId: projectId as string } },
+        variables: {
+            dto: {
+                projectId: projectId as string, 
+                statusId: selectedStatus ?? undefined,
+            }
+        },
         skip: !projectId,
     });
 
+    //Données status
     const { data: statusData, loading : loadingStatus } = useAllStatusQuery({
         skip: status.length > 0, // évite l’appel si déjà en cache
     });
@@ -44,7 +56,7 @@ export default function ProjectDetailPage() {
 
     useEffect(() => {
     if (!projectLoading && !project) {
-        router.replace('/not-found');
+        router.replace('/not-found'); //Si on ne trouve pas le projet on redirige vers not found page
     }
     }, [projectLoading, project, router]);
 
@@ -53,17 +65,19 @@ export default function ProjectDetailPage() {
     if (projectLoading && loadingStatus && status.length === 0) return <p>Chargement...</p>;
     if (!project) return null;
 
-    const filteredTasks = selectedStatus
-    ? tasks.filter((task) => task.status.id === selectedStatus)
-    : tasks;
-
     const handleTaskChange = async () => {
         await refetchTasks(); 
     }
 
-    const handleStatusChange = async (statusId: string) => {
+    const handleStatusChange = async (statusId: string | null) => {
         setSelectedStatus(statusId === 'all' ? null : statusId);
-    }
+        await refetchTasks({
+        dto: {
+            projectId: projectId as string,
+            statusId: statusId === 'all' ? undefined : statusId,
+        },
+        });
+    };
 
     return (
         <div className="flex flex-col h-full">
@@ -88,11 +102,11 @@ export default function ProjectDetailPage() {
                     <div className="flex flex-col items-center justify-center h-full text-gray-400">
                         <div className="animate-pulse">Chargement des taches...</div>
                     </div>
-                ) : filteredTasks.length === 0 ? (
+                ) : tasks.length === 0 ? (
                         <TaskEmptyState onCreated={handleTaskChange} projectId={projectId as string} />
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredTasks.map((task) => (
+                        {tasks.map((task) => (
                             <TaskItem task={task as Task} key={task.id} onUpdate={handleTaskChange} />
                         ))}
                     </div>

@@ -9,7 +9,7 @@ interface IProps {
   task: Task
 }
 
-export default function TaskItem({onUpdate, task}: IProps) {
+export default function TaskItem({ onUpdate, task }: IProps) {
     
   return (
     <div className="bg-gray-950 border border-gray-800 rounded-lg p-4">
@@ -26,7 +26,7 @@ export default function TaskItem({onUpdate, task}: IProps) {
         </div>
         {task.description &&
           <div className="flex items-center justify-between">
-            <h4 className="text-md text-white truncate">
+            <h4 className="text-md text-white whitespace-pre-line">
                 {task.description}
             </h4>
           </div>

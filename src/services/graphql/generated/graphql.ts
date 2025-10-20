@@ -161,6 +161,8 @@ export type Task = {
 export type TaskFiltersInput = {
   /** Identifiant du projet */
   projectId?: InputMaybe<Scalars['String']['input']>;
+  /** Filtre optionnel par statut */
+  statusId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateTaskInput = {
