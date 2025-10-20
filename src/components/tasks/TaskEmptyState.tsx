@@ -15,10 +15,10 @@ export default function TaskEmptyState({onCreated, projectId}: IProps) {
                 <ListTodo className="h-12 w-12 text-gray-500"/>
             </div>
             <h2 className="text-lg font-semibold text-white mb-2">
-                Aucune Tache pour le moment
+                Aucune Tâche pour le moment
             </h2>
             <p className="text-sm text-gray-400 mb-6 max-w-sm">
-                Crée ta première tache
+                Crée ta première tâche
             </p>
         <CreateTaskFormDialog onCreated={onCreated} projectId={projectId} />
         </div>

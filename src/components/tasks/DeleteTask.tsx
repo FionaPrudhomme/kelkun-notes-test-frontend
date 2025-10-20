@@ -22,7 +22,7 @@ export default function DeleteTask({onDelete, task}: IProps) {
     const [deleteTask, { loading }] = useUpdateTaskMutation({
       onError: (err) => toast.error(err.message),
       onCompleted: (res) => {
-        toast.success('Tache supprimée avec succès')
+        toast.success('Tâche supprimée avec succès')
         setIsOpen(false)
         onDelete()
       }
@@ -49,9 +49,9 @@ export default function DeleteTask({onDelete, task}: IProps) {
 
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Supprimer une tache</DialogTitle>
+                    <DialogTitle>Supprimer une tâche</DialogTitle>
                 </DialogHeader>
-                <h3>Voulez-vous vraiment supprimer cette tache ?</h3>
+                <h3>Voulez-vous vraiment supprimer cette tâche ?</h3>
                 <DialogFooter>
                   <Button
                       type="button"
@@ -66,7 +66,7 @@ export default function DeleteTask({onDelete, task}: IProps) {
                       disabled={loading}
                       onClick={() => handleSubmit()}
                   >
-                      {loading ? 'Suppression...' : 'Supprimer la tache'}
+                      {loading ? 'Suppression...' : 'Supprimer la tâche'}
                   </Button>
                 </DialogFooter>
             </DialogContent>

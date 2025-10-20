@@ -31,7 +31,7 @@ export default function ProjectDetailPage() {
 
     const project = projectInStore ?? projectData?.findProjectById;
 
-    //On récupère les taches avec un filtre par projectId et avec statusId 
+    //On récupère les tâches avec un filtre par projectId et avec statusId 
     const { data: tasksData, loading: tasksLoading, refetch: refetchTasks } = useAllTasksQuery({
         variables: {
             dto: {
@@ -100,7 +100,7 @@ export default function ProjectDetailPage() {
             <div className="flex-1 overflow-y-auto">
                 {tasksLoading ? (
                     <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                        <div className="animate-pulse">Chargement des taches...</div>
+                        <div className="animate-pulse">Chargement des tâches...</div>
                     </div>
                 ) : tasks.length === 0 ? (
                         <TaskEmptyState onCreated={handleTaskChange} projectId={projectId as string} />

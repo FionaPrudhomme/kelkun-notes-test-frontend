@@ -32,7 +32,7 @@ export default function CreateTaskFormDialog({onCreated, projectId}: IProps) {
     const [createTask, {loading}] = useCreateTaskMutation({
         onError: (err) => toast.error(err.message),
         onCompleted: (res) => {
-            toast.success('Tache créée')
+            toast.success('Tâche créée')
             setIsOpen(false)
             form.reset()
             onCreated(res.createTask as Task)
@@ -66,13 +66,13 @@ export default function CreateTaskFormDialog({onCreated, projectId}: IProps) {
                     className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
                 >
                     <Plus className="h-4 w-4"/>
-                    Nouvelle Tache
+                    Nouvelle Tâche
                 </Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Créer une Tache</DialogTitle>
+                    <DialogTitle>Créer une Tâche</DialogTitle>
                 </DialogHeader>
 
                 <Form {...form}>
@@ -82,7 +82,7 @@ export default function CreateTaskFormDialog({onCreated, projectId}: IProps) {
                             name="title"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Titre de la tache</FormLabel>
+                                    <FormLabel>Titre de la tâche</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Ex: Peinture mur" {...field} />
                                     </FormControl>
@@ -95,7 +95,7 @@ export default function CreateTaskFormDialog({onCreated, projectId}: IProps) {
                             name="description"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Description de la tache</FormLabel>
+                                    <FormLabel>Description de la tâche</FormLabel>
                                     <FormControl>
                                         <Textarea placeholder="Ex: Repeindre le mur droit en rouge et les autres en blanc" {...field} />
                                     </FormControl>
@@ -116,7 +116,7 @@ export default function CreateTaskFormDialog({onCreated, projectId}: IProps) {
                                 className="bg-blue-600 hover:bg-blue-700 text-white"
                                 disabled={loading}
                             >
-                                {loading ? 'Création...' : 'Créer la tache'}
+                                {loading ? 'Création...' : 'Créer la tâche'}
                             </Button>
                         </DialogFooter>
                     </form>
